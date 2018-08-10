@@ -78,6 +78,26 @@ abstract class Generator
 
 
     /**
+     * Retrieves the sniff of the sniff from the DOMNode supplied.
+     *
+     * @param string $file of teh documentation xml
+     *
+     * @return string
+     */
+    protected function getRule($file)
+    {
+        $file = str_replace('/Docs', '', $file);
+        $file = str_replace('Standard.xml', '', $file);
+        $file = explode('Standards/', $file);
+        $file = $file[1];
+
+        $file = str_replace('/', '.', $file);
+        return $file;
+
+    }//end getRule()
+
+
+    /**
      * Generates the documentation for a standard.
      *
      * It's probably wise for doc generators to override this method so they

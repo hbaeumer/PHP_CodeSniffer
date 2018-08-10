@@ -35,6 +35,7 @@ class HTML extends Generator
             $doc = new \DOMDocument();
             $doc->load($file);
             $documentation = $doc->getElementsByTagName('documentation')->item(0);
+            $documentation->setAttribute('file', $file);
             $this->processSniff($documentation);
         }
 
@@ -191,8 +192,10 @@ class HTML extends Generator
     public function processSniff(\DOMNode $doc)
     {
         $title = $this->getTitle($doc);
+        $sniff = $this->getRule($doc->getAttribute('file'));
         echo '  <a name="'.str_replace(' ', '-', $title).'" />'.PHP_EOL;
         echo "  <h2>$title</h2>".PHP_EOL;
+        echo "  <small>$sniff</small>".PHP_EOL;
 
         foreach ($doc->childNodes as $node) {
             if ($node->nodeName === 'standard') {
