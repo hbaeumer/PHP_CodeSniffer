@@ -138,7 +138,7 @@ class Text extends Generator
                     $tempTitle         = '';
                 } else {
                     $firstTitleLines[] = $tempTitle;
-                    $tempTitle         = $word;
+                    $tempTitle         = $word.' ';
                 }
             } else {
                 $tempTitle .= $word.' ';
@@ -173,7 +173,7 @@ class Text extends Generator
                     $tempTitle          = '';
                 } else {
                     $secondTitleLines[] = $tempTitle;
-                    $tempTitle          = $word;
+                    $tempTitle          = $word.' ';
                 }
             } else {
                 $tempTitle .= $word.' ';
@@ -231,9 +231,9 @@ class Text extends Generator
             }
 
             echo '| ';
-            echo $firstLineText.str_repeat(' ', (47 - strlen($firstLineText)));
+            echo $firstLineText.str_repeat(' ', max(0, (47 - strlen($firstLineText))));
             echo '| ';
-            echo $secondLineText.str_repeat(' ', (48 - strlen($secondLineText)));
+            echo $secondLineText.str_repeat(' ', max(0, (48 - strlen($secondLineText))));
             echo '|'.PHP_EOL;
         }//end for
 

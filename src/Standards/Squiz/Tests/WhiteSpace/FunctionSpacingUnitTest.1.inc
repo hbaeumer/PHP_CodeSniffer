@@ -2,7 +2,13 @@
 /**
 * Comment
 */
+use Foo\{function bar, const BAZ};
 
+use /* comment */ function bar\math\{
+    Msin,
+    level\Mcos as BarCos,
+    Mcosh,
+};
 
 include $blah;
 
@@ -118,7 +124,7 @@ class MyClass
 {
 
     /**
-     * The tag that this element represents (omiting the @ symbol).
+     * The tag that this element represents (omitting the @ symbol).
      *
      * @var string
      */
@@ -361,4 +367,118 @@ $util->setLogger(new class {
 <?php
 function functionInEmbeddedPHP() {
 
+}
+
+// Make sure the indentation for the function comment does not get removed.
+class MyClass
+{
+
+    protected $tag = '';
+
+
+
+    /**
+     * Function comment.
+     *
+     * @return boolean
+     */
+    function func1() {}
+
+}//end class
+
+class MyClass
+{
+
+
+
+    /**
+     * Function comment.
+     *
+     * @return boolean
+     */
+    function func1() {}
+
+}//end class
+
+class MyClass
+{
+    // Unrelated comment.
+    /**
+     * Function comment.
+     *
+     * @return boolean
+     */
+    function func1() {}
+    // phpcs:disable Standard.Category.Sniff -- for reasons.
+    /**
+     * Function comment.
+     *
+     * @return boolean
+     */
+    function func2() {}
+}//end class
+
+// phpcs:set Squiz.WhiteSpace.FunctionSpacing spacing 2
+// phpcs:set Squiz.WhiteSpace.FunctionSpacing spacingBeforeFirst 2
+// phpcs:set Squiz.WhiteSpace.FunctionSpacing spacingAfterLast 2
+
+echo 'just some code to let the below line test blank lines before';
+echo 'something'; function testingFunctionNotOnOwnLine() {} echo 'somethingelse';
+echo 'just some code to let the above line test blank lines after';
+
+trait MyTrait {
+
+
+    public function a(){}
+
+
+
+
+    public function b(){}
+    public function c(){}
+}
+
+$anon_class = new class() {
+    public function a(){}
+
+    protected function b(){}
+
+
+
+
+    private function c(){}
+
+};
+
+// phpcs:set Squiz.WhiteSpace.FunctionSpacing spacing 2
+// phpcs:set Squiz.WhiteSpace.FunctionSpacing spacingBeforeFirst 1
+// phpcs:set Squiz.WhiteSpace.FunctionSpacing spacingAfterLast 3
+
+class MyClass {
+    function a(){}
+    function b(){}
+    function c(){}
+}
+
+$bar = function () {
+    {
+        function a(){}
+        function b(){}
+        function c(){}
+    }
+};
+class Foo {
+    public function returnAnonymousClass() {
+        return new class() {
+            public function baz() {}
+        };
+    }
+
+    public function bar() {
+        function forbidden() {}
+    }
+}
+
+if (function_exists('foo') === false) {
+    function foo(){}
 }
