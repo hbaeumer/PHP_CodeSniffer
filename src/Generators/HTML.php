@@ -13,10 +13,28 @@
 
 namespace PHP_CodeSniffer\Generators;
 
+use PHP_CodeSniffer\Autoload;
 use PHP_CodeSniffer\Config;
+use PHP_CodeSniffer\Ruleset;
 
 class HTML extends Generator
 {
+    public function __construct(Ruleset $ruleset)
+    {
+        $this->ruleset = $ruleset;
+
+        foreach ($ruleset->sniffs as $className => $sniffClass) {
+            $file    = Autoload::getLoadedFileName($className);
+            $docFile = str_replace(
+                DIRECTORY_SEPARATOR.'Sniffs'.DIRECTORY_SEPARATOR,
+                DIRECTORY_SEPARATOR.'Docs'.DIRECTORY_SEPARATOR,
+                $file
+            );
+            $docFile = str_replace('Sniff.php', 'Standard.xml', $docFile);
+
+            $this->docFiles[] = $docFile;
+        }
+    }
 
 
     /**
@@ -32,6 +50,10 @@ class HTML extends Generator
         $this->printToc();
 
         foreach ($this->docFiles as $file) {
+            if (!is_file($file)) {
+                echo "  <h2>Missing $file</h2>".PHP_EOL;
+                continue;
+            }
             $doc = new \DOMDocument();
             $doc->load($file);
             $documentation = $doc->getElementsByTagName('documentation')->item(0);
@@ -145,11 +167,15 @@ class HTML extends Generator
         echo '  <ul class="toc">'.PHP_EOL;
 
         foreach ($this->docFiles as $file) {
+            if (!is_file($file)) {
+                echo '<li>Missing:'.$file.'</li>';
+                continue;
+            }
             $doc = new \DOMDocument();
             $doc->load($file);
             $documentation = $doc->getElementsByTagName('documentation')->item(0);
             $title         = $this->getTitle($documentation);
-            echo '   <li><a href="#'.str_replace(' ', '-', $title)."\">$title</a></li>".PHP_EOL;
+            echo '   <li><a href="#'.str_replace(' ', '-', $title)."\">$title</a>$file</li>".PHP_EOL;
         }
 
         echo '  </ul>'.PHP_EOL;
